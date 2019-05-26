@@ -1,4 +1,4 @@
-package phil.homework.gitcrawler.ui.main
+package phil.homework.gitcrawler.ui.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
