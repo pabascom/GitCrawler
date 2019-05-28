@@ -1,16 +1,15 @@
 package phil.homework.gitcrawler.presenter
 
-import android.app.Activity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import phil.homework.gitcrawler.model.data.remote.QueryParameter
 import phil.homework.gitcrawler.model.data.remote.RemoteDataSource
+import phil.homework.gitcrawler.ui.activity.MainActivity
 import phil.homework.gitcrawler.ui.interaction.searchrepositories.RepositorySearchContract
-import phil.homework.gitcrawler.util.toast
 
-class RepositorySearchPresenter(private val parentActivity: Activity?): RepositorySearchContract.Presenter {
+class RepositorySearchPresenter(private val parentActivity: MainActivity?): RepositorySearchContract.Presenter {
 
     private var searchView: RepositorySearchContract.SearchView? = null
     private var listView: RepositorySearchContract.ListView? = null
@@ -20,6 +19,7 @@ class RepositorySearchPresenter(private val parentActivity: Activity?): Reposito
 
     override fun attachView(view: RepositorySearchContract.SearchView) {
         this.searchView = view
+        this.listView = parentActivity?.instantiateListViewFragment(this)
     }
 
     override fun detachView() {
@@ -34,7 +34,7 @@ class RepositorySearchPresenter(private val parentActivity: Activity?): Reposito
     ) {
         coroutineScope.launch {
             val results = withContext(Dispatchers.Default) {
-                dataSource.searchRepositories(
+                dataSource.searchRepositoriesAsync(
                     query,
                     searchingParameter,
                     sortingParameter
@@ -47,7 +47,7 @@ class RepositorySearchPresenter(private val parentActivity: Activity?): Reposito
     override fun processSortRequest(sortingParameter: QueryParameter.SortingOption) {
         coroutineScope.launch {
             val results = withContext(Dispatchers.Default) {
-                dataSource.sortRepositories(sortingParameter)
+                dataSource.sortRepositoriesAsync(sortingParameter)
             }
             if(results != null) listView?.setContents(results.await().items)
         }

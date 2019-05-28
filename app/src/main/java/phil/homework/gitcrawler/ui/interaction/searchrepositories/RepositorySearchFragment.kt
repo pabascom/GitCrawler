@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_repository_search.*
 import phil.homework.gitcrawler.R
 import phil.homework.gitcrawler.model.data.remote.QueryParameter
 import phil.homework.gitcrawler.presenter.RepositorySearchPresenter
+import phil.homework.gitcrawler.ui.activity.MainActivity
 
 class RepositorySearchFragment : Fragment(), RepositorySearchContract.SearchView {
 
@@ -54,7 +55,8 @@ class RepositorySearchFragment : Fragment(), RepositorySearchContract.SearchView
 
     override fun onStart() {
         super.onStart()
-        presenter = RepositorySearchPresenter(activity)
+        val parentActivity = activity as MainActivity
+        presenter = RepositorySearchPresenter(parentActivity)
         presenter?.attachView(this)
     }
 

@@ -1,55 +1,54 @@
 package phil.homework.gitcrawler.model.data.remote
 
+import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import phil.homework.gitcrawler.model.entity.result.RepositorySearchResult
-import phil.homework.gitcrawler.model.entity.result.RepositorySummary
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RemoteDataSource {
     private var lastQuery: String? = null
 
-    val service = Retrofit.Builder()
+    private val service = Retrofit.Builder()
         .client(OkHttpClient())
         .baseUrl(REPOSITORY_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build().create(RemoteService::class.java)
 
-    fun searchRepositories(
+    fun searchRepositoriesAsync(
         query: String,
         searchingOption: QueryParameter.SearchingOption,
         sortingOption: QueryParameter.SortingOption
     ): Deferred<RepositorySearchResult> {
 
-        var q = StringBuilder()
+        val q = StringBuilder()
         if(searchingOption == QueryParameter.SearchingOption.BY_USER_NAME) q.append(REPOSITORY_QUALIFIER_USER_NAME)
         q.append(query)
         if(searchingOption == QueryParameter.SearchingOption.BY_REPOSITORY_NAME) q.append(REPOSITORY_QUALIFIER_REPO_NAME)
         lastQuery = q.toString()
+        Log.d(RemoteDataSource::class.java.simpleName, "searchRepositories: ${q.toString()}")
 
-        return service.searchRepositories(
+        return service.searchRepositoriesAsync(
             q.toString(),
             stringify(sortingOption)
         )
     }
 
-    fun sortRepositories(
+    fun sortRepositoriesAsync(
         sortingOption: QueryParameter.SortingOption
     ): Deferred<RepositorySearchResult>? {
 
         return if(lastQuery == null){
             null
         } else {
-            service.searchRepositories(
+            service.searchRepositoriesAsync(
                 lastQuery!!,
                 stringify(sortingOption)
             )
         }
-
-
 
     }
 

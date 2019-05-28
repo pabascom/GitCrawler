@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface RemoteService {
 
     @GET(REPOSITORY_SEARCH_PATH)
-    fun searchRepositories(
+    fun searchRepositoriesAsync(
         @Query(REPOSITORY_QUERY_IDENTIFIER) query: String,
         @Query(REPOSITORY_SORT_IDENTIFIER) sortingOption: String
     ): Deferred<RepositorySearchResult>

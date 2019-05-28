@@ -13,15 +13,19 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+    <!--fragment
+            android:name="phil.homework.gitcrawler.ui.interaction.searchrepositories.RepositoryListFragment"
+            android:id="@+id/repositoryListFragment"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/-->
 
     <fragment
             android:layout_weight="0"
             android:id="@+id/repositorySearchFragment"
             android:name="phil.homework.gitcrawler.ui.interaction.searchrepositories.RepositorySearchFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-    </fragment>
+            android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
